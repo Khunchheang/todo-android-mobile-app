@@ -9,6 +9,9 @@ buildscript {
         multidex_version = '1.0.3'
         room_version = '1.1.1'
         dbdebug_version = '1.0.4'
+        glide_version = '4.8.0'
+        dagger_version = '2.21'
+        rxjava_version = '2.1.0'
     }
 
     repositories {

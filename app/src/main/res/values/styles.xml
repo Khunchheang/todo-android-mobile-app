@@ -11,6 +11,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!--Splash Theme-->
+    <style name="AppTheme.NoActionBar.Launcher">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowBackground">@drawable/bg_splash_screen</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
