@@ -4,35 +4,33 @@
       tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
-                android:id="@+id/nav_camera"
-                android:icon="@drawable/ic_menu_camera"
-                android:title="Import"/>
-        <item
-                android:id="@+id/nav_gallery"
-                android:icon="@drawable/ic_menu_gallery"
-                android:title="Gallery"/>
-        <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="Slideshow"/>
-        <item
-                android:id="@+id/nav_manage"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="Tools"/>
+        <item android:id="@+id/nav_today"
+              android:icon="@drawable/ic_today"
+              android:title="@string/today"/>
+
+        <item android:id="@+id/nav_next_seven_days"
+              android:icon="@drawable/ic_assignment"
+              android:title="@string/next_seven_days"/>
+
+        <item android:id="@+id/nav_priority"
+              android:icon="@drawable/ic_priority"
+              android:title="@string/priority"/>
+
+        <item android:id="@+id/nav_complete"
+              android:icon="@drawable/ic_done"
+              android:title="@string/complete"/>
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                    android:id="@+id/nav_share"
-                    android:icon="@drawable/ic_menu_share"
-                    android:title="Share"/>
-            <item
-                    android:id="@+id/nav_send"
-                    android:icon="@drawable/ic_menu_send"
-                    android:title="Send"/>
-        </menu>
-    </item>
+    <group android:id="@+id/menu_bottom"
+           android:checkableBehavior="none">
+
+        <item android:id="@+id/nav_theme"
+              android:icon="@drawable/ic_settings"
+              android:title="@string/theme"/>
+
+        <item android:id="@+id/nav_share"
+              android:icon="@drawable/ic_menu_share"
+              android:title="@string/share"/>
+    </group>
 
 </menu>
