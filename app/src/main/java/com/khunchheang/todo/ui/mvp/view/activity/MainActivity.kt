@@ -19,6 +19,7 @@ import com.khunchheang.todo.ui.adapter.TaskAdapter
 import com.khunchheang.todo.ui.base.activity.BaseBasicMvpActivity
 import com.khunchheang.todo.ui.listener.ItemClickListener
 import com.khunchheang.todo.ui.mvp.GetTaskList
+import com.khunchheang.todo.ui.mvp.ShareApp
 import com.khunchheang.todo.util.AppConstants
 import com.khunchheang.todo.util.TaskType
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,7 +28,7 @@ import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
 class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-    ItemClickListener, GetTaskList.TaskListView {
+    ItemClickListener, GetTaskList.TaskListView, ShareApp.ShareAppView {
 
     @Inject
     lateinit var activityIntent: Intent
@@ -35,6 +36,8 @@ class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSele
     lateinit var taskAdapter: TaskAdapter
     @Inject
     lateinit var taskListPresenter: GetTaskList.TaskListPreesnter
+    @Inject
+    lateinit var shareAppPresenter: ShareApp.ShareAppPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -55,6 +58,7 @@ class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSele
         setupRecyclerViewTasks()
 
         taskListPresenter.attach(this)
+        shareAppPresenter.attach(this)
         taskListPresenter.getTaskList(TaskType.Today)
     }
 
@@ -64,6 +68,7 @@ class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSele
         } else if (!nav_view.menu.getItem(0).isChecked) {
             nav_view.menu.getItem(0).isChecked = true
             taskListPresenter.getTaskList(TaskType.Today)
+            fab_add.show()
         } else {
             super.onBackPressed()
         }
@@ -71,6 +76,7 @@ class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSele
 
     override fun onDestroy() {
         taskListPresenter.detach()
+        shareAppPresenter.detach()
         super.onDestroy()
     }
 
@@ -90,8 +96,7 @@ class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSele
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_search -> {
-                Snackbar.make(drawer_layout, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction(getString(R.string.comming_soon), null).show()
+                showSnackBar()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -116,14 +121,13 @@ class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSele
             R.id.nav_complete -> taskListPresenter.getTaskList(TaskType.Complete)
 
             R.id.nav_theme -> {
-
+                showSnackBar()
             }
 
-            R.id.nav_share -> {
-
-            }
+            R.id.nav_share -> shareAppPresenter.doShare()
         }
 
+        fab_add.show()
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
@@ -139,6 +143,10 @@ class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSele
     override fun onTaskResponse(lstOptionsSet: List<TaskModel>) {
         tv_no_task.visibility = if (lstOptionsSet.isEmpty()) View.VISIBLE else View.GONE
         taskAdapter.addItems(lstOptionsSet as ArrayList<TaskModel>)
+    }
+
+    override fun startShare(intent: Intent) {
+        startActivity(intent)
     }
 
     private fun initDrawerLayout() {
@@ -171,5 +179,10 @@ class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSele
                 }
             }
         })
+    }
+
+    private fun showSnackBar() {
+        Snackbar.make(drawer_layout, getString(R.string.comming_soon), Snackbar.LENGTH_LONG)
+            .setAction("Action", null).show()
     }
 }

@@ -42,4 +42,10 @@ class AppDataModule {
     fun provideDeleteTaskInter(appDatabase: AppDatabase): DeleteTask.DeleteTaskInteractor {
         return DeleteTaskInteractorImpl(appDatabase.todoDao())
     }
+
+    @Provides
+    @Singleton
+    fun providShareAppInter(): ShareApp.ShareAppInteractor {
+        return ShareAppInteractorImpl()
+    }
 }
