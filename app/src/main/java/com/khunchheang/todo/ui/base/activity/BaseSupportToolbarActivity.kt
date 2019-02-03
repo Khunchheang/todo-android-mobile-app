@@ -3,7 +3,7 @@ package com.khunchheang.todo.ui.base.activity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 
-class BaseSupportToolbarActivity : BaseBasicActivity() {
+abstract class BaseSupportToolbarActivity : BaseBasicActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
@@ -17,7 +17,6 @@ class BaseSupportToolbarActivity : BaseBasicActivity() {
     internal fun setSupportToolbar(toolbar: Toolbar) {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
     }
-
 }

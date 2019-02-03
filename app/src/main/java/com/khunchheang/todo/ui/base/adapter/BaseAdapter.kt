@@ -3,7 +3,7 @@ package com.khunchheang.todo.ui.base.adapter
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
-abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder>constructor(var items: ArrayList<T>?) : RecyclerView.Adapter<VH>() {
+abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder>constructor(private var items: ArrayList<T>?) : RecyclerView.Adapter<VH>() {
 
     abstract fun setViewHolder(parent: ViewGroup, viewType: Int): VH
 

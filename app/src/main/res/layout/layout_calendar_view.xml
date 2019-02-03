@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <CalendarView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <Button
+            android:id="@+id/btn_cancel"
+            android:layout_margin="@dimen/margin_3x"
+            android:layout_below="@+id/calendar"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:text="@string/cancel"
+            android:background="@color/colorTransparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UnusedAttribute"/>
+
+    <Button
+            android:id="@+id/btn_ok"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/margin_3x"
+            android:layout_below="@+id/calendar"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:text="@string/ok"
+            android:background="@color/colorTransparent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UnusedAttribute"/>
+
+</RelativeLayout>

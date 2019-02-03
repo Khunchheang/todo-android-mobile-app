@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:padding="@dimen/padding_5x"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:layout_height="wrap_content">
+
+    <ImageView
+            android:src="@drawable/ic_today"
+            android:id="@+id/img_icon"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription"/>
+
+    <TextView
+            android:textSize="@dimen/text_medium"
+            android:id="@+id/tv_title"
+            android:text="@string/due_date"
+            android:textColor="@color/colorTextBlack"
+            android:layout_marginStart="@dimen/margin_6x"
+            android:layout_toEndOf="@+id/img_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/tv_sub_title"
+            android:textSize="@dimen/text_small"
+            android:text="@string/date"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginStart="@dimen/margin_6x"
+            android:layout_toEndOf="@+id/img_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <ImageView
+            android:id="@+id/img_checked"
+            android:src="@drawable/ic_checked_accent_24dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="ContentDescription"/>
+
+</RelativeLayout>

@@ -7,7 +7,12 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import com.khunchheang.todo.ui.base.basemvp.BaseMvpView
 import dagger.android.AndroidInjection
+import android.app.Activity
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+
 
 abstract class BaseBasicActivity : AppCompatActivity() {
 
@@ -37,7 +42,7 @@ abstract class BaseBasicActivity : AppCompatActivity() {
         Log.d("ActivityLifecycle", String.format("onStop (%s)", this.javaClass.simpleName))
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d("ActivityLifecycle", String.format("onActivityResult (%s)", this.javaClass.simpleName))
     }
@@ -61,5 +66,12 @@ abstract class BaseBasicActivity : AppCompatActivity() {
 
     internal fun showLogD(msg: Int) {
         showLogD(getString(msg))
+    }
+
+    internal fun hideKeyboard(){
+        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        var view = currentFocus
+        if (view == null) view = View(applicationContext)
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

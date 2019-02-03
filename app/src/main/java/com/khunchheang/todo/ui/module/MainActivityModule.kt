@@ -1,7 +1,9 @@
 package com.khunchheang.todo.ui.module
 
-import com.khunchheang.todo.data.model.TodoModel
-import com.khunchheang.todo.di.DatabaseDebugUrl
+import android.content.Context
+import com.khunchheang.todo.ui.adapter.TaskAdapter
+import com.khunchheang.todo.ui.mvp.GetTaskList
+import com.khunchheang.todo.ui.mvp.presenterimpl.TaskListPresenterImpl
 import com.khunchheang.todo.ui.scope.MainActivityScope
 import dagger.Module
 import dagger.Provides
@@ -11,10 +13,14 @@ class MainActivityModule {
 
     @Provides
     @MainActivityScope
-    fun provideTodoModel(): TodoModel = TodoModel()
+    fun provideTaskAdapter(context: Context): TaskAdapter {
+        return TaskAdapter(context, ArrayList())
+    }
 
     @Provides
     @MainActivityScope
-    @DatabaseDebugUrl
-    fun provideDebugDbUrl(): String = "Khunchheang"
+    fun provideTaskListPre(taskListInter: GetTaskList.TaskListInteractor): GetTaskList.TaskListPreesnter {
+        return TaskListPresenterImpl(taskListInter)
+    }
+
 }

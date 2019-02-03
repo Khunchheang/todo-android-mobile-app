@@ -3,4 +3,18 @@
     <color name="colorPrimary">#F57F17</color>
     <color name="colorPrimaryDark">#BC5100</color>
     <color name="colorAccent">#F9A825</color>
+
+    <!--Text color-->
+    <color name="colorTextWhite">#ffff</color>
+    <color name="colorTextBlack">#000000</color>
+    <color name="colorTextYellow">#ec8a0a</color>
+    <color name="colorTextGrey">#5a5959</color>
+    <color name="colorTextSoftGrey">#a8aaa9</color>
+    <color name="colorTextSoftGrey1">#dfdfdf</color>
+    <color name="colorTextWhite10">#f2efef</color>
+    <color name="colorTextRed">#FFEC3F0A</color>
+    <!--Divider color-->
+    <color name="colorDivider">#dddddd</color>
+
+    <color name="colorTransparent">#00000000</color>
 </resources>

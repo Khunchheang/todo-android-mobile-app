@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context="com.khunchheang.todo.ui.mvp.view.activity.CreateTodoActivity">
+
+    <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
+            android:fitsSystemWindows="true"
+            android:layout_height="@dimen/app_bar_height"
+            android:layout_width="match_parent"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/toolbar_layout"
+                android:fitsSystemWindows="true"
+                android:layout_width="match_parent"
+                app:expandedTitleGravity="top"
+                app:expandedTitleTextAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:layout_height="match_parent"
+                app:expandedTitleMarginTop="@dimen/expanded_title_martin_top"
+                app:expandedTitleMarginStart="@dimen/expanded_title_margin_start"
+                app:toolbarId="@+id/toolbar"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="?attr/colorPrimary">
+
+            <EditText
+                    android:layout_width="match_parent"
+                    android:hint="@string/task_hint"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/expanded_title_margin_start"
+                    android:scrollbars="vertical"
+                    android:layout_marginTop="@dimen/edt_task_margin_top"
+                    android:maxLines="5"
+                    android:layout_marginEnd="@dimen/fab_margin"
+                    android:id="@+id/edt_task"
+                    android:layout_height="wrap_content"/>
+
+            <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_width="match_parent"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_create_todo"/>
+
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:layout_anchor="@id/app_bar"
+            app:layout_anchorGravity="bottom|end"
+            app:srcCompat="@drawable/ic_done_white_24dp"/>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,19 +1,40 @@
 package com.khunchheang.todo.ui.mvp.view.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.khunchheang.todo.R
-import com.khunchheang.todo.ui.base.activity.BaseBasicActivity
+import com.khunchheang.todo.data.model.db.TaskModel
+import com.khunchheang.todo.ui.adapter.TaskAdapter
+import com.khunchheang.todo.ui.base.activity.BaseBasicMvpActivity
+import com.khunchheang.todo.ui.listener.ItemClickListener
+import com.khunchheang.todo.ui.mvp.GetTaskList
+import com.khunchheang.todo.util.AppConstants
+import com.khunchheang.todo.util.TaskType
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
+import javax.inject.Inject
 
-class MainActivity : BaseBasicActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
+    ItemClickListener, GetTaskList.TaskListView {
+
+    @Inject
+    lateinit var activityIntent: Intent
+    @Inject
+    lateinit var taskAdapter: TaskAdapter
+    @Inject
+    lateinit var taskListPresenter: GetTaskList.TaskListPreesnter
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -29,13 +50,35 @@ class MainActivity : BaseBasicActivity(), NavigationView.OnNavigationItemSelecte
 
         //Init listener
         fab_add.setOnClickListener(this)
+
+        //Init task recycler view
+        setupRecyclerViewTasks()
+
+        taskListPresenter.attach(this)
+        taskListPresenter.getTaskList(TaskType.Today)
     }
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
+        } else if (!nav_view.menu.getItem(0).isChecked) {
+            nav_view.menu.getItem(0).isChecked = true
+            taskListPresenter.getTaskList(TaskType.Today)
         } else {
             super.onBackPressed()
+        }
+    }
+
+    override fun onDestroy() {
+        taskListPresenter.detach()
+        super.onDestroy()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AppConstants.REQUEST_CREATE_TODO_CODE && resultCode == Activity.RESULT_OK) {
+            nav_view.menu.getItem(0).isChecked = true
+            taskListPresenter.getTaskList(TaskType.Today)
         }
     }
 
@@ -45,24 +88,33 @@ class MainActivity : BaseBasicActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_search -> return true
-            else -> return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.action_search -> {
+                Snackbar.make(drawer_layout, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.comming_soon), null).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onItemClicked(view: View, pos: Int) {
+        val intent = Intent(this, CreateTodoActivity::class.java)
+        intent.putExtra(AppConstants.TASK_ID, taskAdapter.getItemPosition(pos).id)
+        startActivityForResult(intent, AppConstants.REQUEST_CREATE_TODO_CODE)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_today -> {
-                // Handle the camera action
-            }
-            R.id.nav_next_seven_days -> {
+            R.id.nav_today -> taskListPresenter.getTaskList(TaskType.Today)
 
-            }
-            R.id.nav_priority -> {
+            R.id.nav_next_seven_days -> taskListPresenter.getTaskList(TaskType.NextSevenDay)
 
-            }
+            R.id.nav_priority -> taskListPresenter.getTaskList(TaskType.Priority)
+
+            R.id.nav_complete -> taskListPresenter.getTaskList(TaskType.Complete)
+
             R.id.nav_theme -> {
 
             }
@@ -79,9 +131,14 @@ class MainActivity : BaseBasicActivity(), NavigationView.OnNavigationItemSelecte
     override fun onClick(view: View?) {
         val id = view?.id
         if (id == fab_add.id) {
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            activityIntent.setClass(this, CreateTodoActivity::class.java)
+            startActivityForResult(activityIntent, AppConstants.REQUEST_CREATE_TODO_CODE)
         }
+    }
+
+    override fun onTaskResponse(lstOptionsSet: List<TaskModel>) {
+        tv_no_task.visibility = if (lstOptionsSet.isEmpty()) View.VISIBLE else View.GONE
+        taskAdapter.addItems(lstOptionsSet as ArrayList<TaskModel>)
     }
 
     private fun initDrawerLayout() {
@@ -95,5 +152,24 @@ class MainActivity : BaseBasicActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
         nav_view.menu.getItem(0).isChecked = true
+    }
+
+    private fun setupRecyclerViewTasks() {
+        recycler_task.setHasFixedSize(true)
+        recycler_task.layoutManager = LinearLayoutManager(applicationContext)
+        recycler_task.addItemDecoration(DividerItemDecoration(applicationContext, DividerItemDecoration.VERTICAL))
+        recycler_task.adapter = taskAdapter
+        taskAdapter.itemClickListener = this
+
+        recycler_task.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0 && fab_add.visibility == View.VISIBLE) {
+                    fab_add.hide()
+                } else if (dy < 0 && fab_add.visibility != View.VISIBLE) {
+                    fab_add.show()
+                }
+            }
+        })
     }
 }
