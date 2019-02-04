@@ -72,6 +72,7 @@ class CreateTodoActivity : BaseSupportToolbarMvpActivity(), View.OnClickListener
 
     override fun onTaskResponse(taskModel: TaskModel) {
         edt_task.setText(taskModel.task)
+        selectedDueDate = taskModel.dueDate!!
         optionsSetAdapter.getItemPosition(0).subTitle = Common.getDisplayMonthAndDay(taskModel.dueDate!!)
         optionsSetAdapter.getItemPosition(1).isPriority = taskModel.isPriority!!
         optionsSetAdapter.notifyDataSetChanged()
