@@ -8,7 +8,7 @@ import com.khunchheang.todo.ui.mvp.GetTaskList
 import com.khunchheang.todo.util.TaskType
 
 class TaskListPresenterImpl(private val taskListInter: GetTaskList.TaskListInteractor) :
-    BasePresenterImpl<ListTaskModel, GetTaskList.TaskListView>(), GetTaskList.TaskListPreesnter {
+    BasePresenterImpl<ListTaskModel, GetTaskList.TaskListView>(), GetTaskList.TaskListPresenter {
 
     override fun onSuccess(data: ListTaskModel) {
         view?.hideLoading()
@@ -26,8 +26,10 @@ class TaskListPresenterImpl(private val taskListInter: GetTaskList.TaskListInter
                 TaskType.Priority -> taskListInter.onGetTaskPriority()
 
                 TaskType.Complete -> taskListInter.onGetTaskComplete()
+
+                TaskType.Overdue -> taskListInter.onGetTaskOverdue()
             }
-        }, 500)
+        }, 300)
     }
 
     override fun getInter(): BaseInteractor<ListTaskModel> {

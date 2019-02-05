@@ -21,7 +21,7 @@ class MainActivityModule {
 
     @Provides
     @MainActivityScope
-    fun provideTaskListPre(taskListInter: GetTaskList.TaskListInteractor): GetTaskList.TaskListPreesnter {
+    fun provideTaskListPre(taskListInter: GetTaskList.TaskListInteractor): GetTaskList.TaskListPresenter {
         return TaskListPresenterImpl(taskListInter)
     }
 

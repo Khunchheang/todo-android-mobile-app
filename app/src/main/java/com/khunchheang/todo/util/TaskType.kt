@@ -5,6 +5,7 @@ enum class TaskType {
     Today,
     NextSevenDay,
     Priority,
-    Complete
+    Complete,
+    Overdue
 
 }

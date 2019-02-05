@@ -35,7 +35,7 @@ class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSele
     @Inject
     lateinit var taskAdapter: TaskAdapter
     @Inject
-    lateinit var taskListPresenter: GetTaskList.TaskListPreesnter
+    lateinit var taskListPresenter: GetTaskList.TaskListPresenter
     @Inject
     lateinit var shareAppPresenter: ShareApp.ShareAppPresenter
 
@@ -119,6 +119,8 @@ class MainActivity : BaseBasicMvpActivity(), NavigationView.OnNavigationItemSele
             R.id.nav_priority -> taskListPresenter.getTaskList(TaskType.Priority)
 
             R.id.nav_complete -> taskListPresenter.getTaskList(TaskType.Complete)
+
+            R.id.nav_overdue -> taskListPresenter.getTaskList(TaskType.Overdue)
 
             R.id.nav_theme -> {
                 showSnackBar()

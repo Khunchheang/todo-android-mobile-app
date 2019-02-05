@@ -17,9 +17,11 @@ interface GetTaskList {
         fun onGetTaskPriority()
 
         fun onGetTaskComplete()
+
+        fun onGetTaskOverdue()
     }
 
-    interface TaskListPreesnter : BasePresenter<TaskListView> {
+    interface TaskListPresenter : BasePresenter<TaskListView> {
         fun getTaskList(taskType: TaskType)
     }
 

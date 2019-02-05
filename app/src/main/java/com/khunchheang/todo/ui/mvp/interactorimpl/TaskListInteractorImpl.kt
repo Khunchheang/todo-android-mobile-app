@@ -33,6 +33,11 @@ class TaskListInteractorImpl(private val currentDate: Date, private val taskDao:
         onGetListTasks(lst)
     }
 
+    override fun onGetTaskOverdue() {
+        val lst = taskDao.loadAllTasksOverdue(currentDate.time)
+        onGetListTasks(lst)
+    }
+
     private fun onGetListTasks(lstTasks: List<TaskModel>) {
         val listTaskModel = ListTaskModel(lstTasks)
         responseListener?.onSuccess(listTaskModel)

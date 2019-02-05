@@ -21,6 +21,7 @@ import com.khunchheang.todo.util.AppConstants
 import com.khunchheang.todo.util.Common
 import kotlinx.android.synthetic.main.activity_create_todo.*
 import kotlinx.android.synthetic.main.content_create_todo.*
+import kotlinx.android.synthetic.main.layout_calendar_view.*
 import kotlinx.android.synthetic.main.layout_calendar_view.view.*
 import java.util.*
 import javax.inject.Inject
@@ -42,7 +43,7 @@ class CreateTodoActivity : BaseSupportToolbarMvpActivity(), View.OnClickListener
     @Inject
     lateinit var currentDate: Date
 
-    private lateinit var selectedDueDate: Date
+    private lateinit var dueDate: Date
     private var taskId = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +59,7 @@ class CreateTodoActivity : BaseSupportToolbarMvpActivity(), View.OnClickListener
         optionSetPresenter.getOptionsSet()
 
         //Set default due date
-        selectedDueDate = currentDate
+        dueDate = currentDate
 
         //Set options set recycler view
         setupRecyclerOptionsSet()
@@ -71,8 +72,9 @@ class CreateTodoActivity : BaseSupportToolbarMvpActivity(), View.OnClickListener
     }
 
     override fun onTaskResponse(taskModel: TaskModel) {
+        dueDate = if (taskModel.dueDate!! < currentDate) currentDate else taskModel.dueDate!!
+
         edt_task.setText(taskModel.task)
-        selectedDueDate = taskModel.dueDate!!
         optionsSetAdapter.getItemPosition(0).subTitle = Common.getDisplayMonthAndDay(taskModel.dueDate!!)
         optionsSetAdapter.getItemPosition(1).isPriority = taskModel.isPriority!!
         optionsSetAdapter.notifyDataSetChanged()
@@ -142,33 +144,39 @@ class CreateTodoActivity : BaseSupportToolbarMvpActivity(), View.OnClickListener
     }
 
     private fun showCalendarBottomSheet() {
+        var selectedDueDateByUser: Date? = null
         val sheetView = layoutInflater.inflate(R.layout.layout_calendar_view, null, false)
         val bottomSheetDialog = BottomSheetDialog(this@CreateTodoActivity)
         bottomSheetDialog.setContentView(sheetView)
         bottomSheetDialog.show()
+
+        val calendarView = sheetView.calendar
+        calendarView.minDate = currentDate.time
+        calendarView.date = dueDate.time
+
         sheetView.btn_cancel.setOnClickListener {
-            selectedDueDate = currentDate
             bottomSheetDialog.dismiss()
         }
 
         sheetView.btn_ok.setOnClickListener {
+            if (selectedDueDateByUser != null) dueDate = selectedDueDateByUser as Date
             bottomSheetDialog.dismiss()
             setDueDateSubtitle()
         }
 
         sheetView.calendar.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            selectedDueDate = GregorianCalendar(year, month, dayOfMonth, 0, 0).time
+            selectedDueDateByUser = GregorianCalendar(year, month, dayOfMonth, 0, 0).time
         }
     }
 
     private fun setDueDateSubtitle() {
-        optionsSetAdapter.getItemPosition(0).subTitle = Common.getDisplayMonthAndDay(selectedDueDate)
+        optionsSetAdapter.getItemPosition(0).subTitle = Common.getDisplayMonthAndDay(dueDate)
         optionsSetAdapter.notifyItemChanged(0)
     }
 
     private fun createTask(isComplete: Boolean) {
         val task = edt_task.text.toString()
         val isPriority = optionsSetAdapter.getItemPosition(1).isPriority
-        createTodoPresenter.createTodo(taskId, task, selectedDueDate, isPriority, isComplete)
+        createTodoPresenter.createTodo(taskId, task, dueDate, isPriority, isComplete)
     }
 }

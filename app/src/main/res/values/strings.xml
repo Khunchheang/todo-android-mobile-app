@@ -30,5 +30,6 @@
     <string name="none">None</string>
     <string name="no_task_available">No task available</string>
     <string name="comming_soon">Comming soon</string>
+    <string name="overdue">Overdue</string>
 
 </resources>

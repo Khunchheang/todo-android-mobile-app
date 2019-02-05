@@ -15,6 +15,9 @@ interface TaskDao {
     @Query("SELECT * FROM tb_tasks")
     fun loadAll(): List<TaskModel>
 
+    @Query("SELECT * FROM tb_tasks WHERE due_date < :todayTime AND is_complete = 0")
+    fun loadAllTasksOverdue(todayTime: Long): List<TaskModel>
+
     @Query("SELECT * FROM tb_tasks WHERE due_date = :todayTime AND is_complete = 0")
     fun loadAllTasksToday(todayTime: Long): List<TaskModel>
 
