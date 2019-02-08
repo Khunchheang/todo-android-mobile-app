@@ -1,30 +1,30 @@
 package com.khunchheang.todo.ui.mvp.interactorimpl
 
 import android.content.Context
-import com.khunchheang.todo.R
-import com.khunchheang.todo.data.model.other.ListOptionSetModel
 import com.khunchheang.todo.data.model.other.OptionSetModel
-import com.khunchheang.todo.ui.base.basemvp.baseinteractorimpl.BaseInteractorImpl
+import com.khunchheang.todo.ui.base.basemvp.response.ResponseModel
+import com.khunchheang.todo.ui.base.basemvp.response.SuccessResponseModel
 import com.khunchheang.todo.ui.mvp.OptionsSet
 import com.khunchheang.todo.util.Common
 import java.util.*
+import com.khunchheang.todo.R
 
 class OptionSetInteractorImpl(private val context: Context, private val currentDate: Date) :
-    BaseInteractorImpl<ListOptionSetModel>(),
     OptionsSet.OptionSetInteractor {
 
-    override fun onGetOptionsSet() {
-        responseListener?.onSuccess(getListOptionsSet())
+    override fun onGetOptionsSet(completion: (responseModel: ResponseModel) -> Unit) {
+        completion(SuccessResponseModel(getListOptionsSet()))
     }
 
     override fun onCancelLoading() {
 
     }
 
-    private fun getListOptionsSet(): ListOptionSetModel {
+    private fun getListOptionsSet(): List<OptionSetModel> {
         val lstOptionSetModel = ArrayList<OptionSetModel>()
 
         val dueDate = OptionSetModel(
+
             R.drawable.ic_today,
             context.getString(R.string.due_date),
             Common.getDisplayMonthAndDay(currentDate),
@@ -41,6 +41,6 @@ class OptionSetInteractorImpl(private val context: Context, private val currentD
         lstOptionSetModel.add(dueDate)
         lstOptionSetModel.add(priority)
 
-        return ListOptionSetModel(lstOptionSetModel)
+        return lstOptionSetModel
     }
 }

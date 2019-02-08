@@ -3,15 +3,17 @@ package com.khunchheang.todo.ui.base.basemvp.basepresenterimpl
 import com.khunchheang.todo.ui.base.basemvp.BaseInteractor
 import com.khunchheang.todo.ui.base.basemvp.BaseMvpView
 import com.khunchheang.todo.ui.base.basemvp.BasePresenter
-import com.khunchheang.todo.ui.base.basemvp.response.BaseResponseListener
+import com.khunchheang.todo.ui.base.basemvp.response.ErrorResponseModel
+import com.khunchheang.todo.ui.base.basemvp.response.ExceptionResponseModel
+import com.khunchheang.todo.ui.base.basemvp.response.ResponseModel
+import com.khunchheang.todo.ui.base.basemvp.response.SuccessResponseModel
 
-abstract class BasePresenterImpl<T, V : BaseMvpView> : BasePresenter<V>, BaseResponseListener<T> {
+abstract class BasePresenterImpl<T, V : BaseMvpView> : BasePresenter<V> {
 
     var view: V? = null
 
     override fun attach(view: V) {
         this.view = view
-        getInter().setListener(this)
     }
 
     override fun cancelLoading() {
@@ -24,15 +26,24 @@ abstract class BasePresenterImpl<T, V : BaseMvpView> : BasePresenter<V>, BaseRes
         getInter().onCancelLoading()
     }
 
-    override fun onError(msg: String) {
+    override fun onResponseData(response: ResponseModel) {
         view?.hideLoading()
-        view?.showError(msg)
+
+        when (response) {
+            is SuccessResponseModel<*> -> {
+                @Suppress("UNCHECKED_CAST")
+                onSuccess(response.data as T)
+            }
+            is ExceptionResponseModel -> {
+                view?.showException(response.msg)
+            }
+            is ErrorResponseModel -> {
+                view?.showError(response.msg)
+            }
+        }
     }
 
-    override fun onException(msg: String) {
-        view?.hideLoading()
-        view?.showException(msg)
-    }
+    protected abstract fun onSuccess(data: T)
 
     protected abstract fun getInter(): BaseInteractor<T>
 }

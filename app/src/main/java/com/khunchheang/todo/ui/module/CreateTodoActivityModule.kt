@@ -1,15 +1,11 @@
 package com.khunchheang.todo.ui.module
 
 import android.content.Context
-import com.khunchheang.todo.R
-import com.khunchheang.todo.data.local.AppDatabase
-import com.khunchheang.todo.data.model.other.OptionSetModel
 import com.khunchheang.todo.ui.adapter.OptionSetAdapter
 import com.khunchheang.todo.ui.mvp.CreateTodo
 import com.khunchheang.todo.ui.mvp.DeleteTask
 import com.khunchheang.todo.ui.mvp.GetTask
 import com.khunchheang.todo.ui.mvp.OptionsSet
-import com.khunchheang.todo.ui.mvp.interactorimpl.GetTaskInteractorImpl
 import com.khunchheang.todo.ui.mvp.presenterimpl.CreateTodoPresenterImpl
 import com.khunchheang.todo.ui.mvp.presenterimpl.DeleteTaskPresenterImpl
 import com.khunchheang.todo.ui.mvp.presenterimpl.GetTaskPresenterImpl
@@ -17,8 +13,6 @@ import com.khunchheang.todo.ui.mvp.presenterimpl.OptionSetPresenterImpl
 import com.khunchheang.todo.ui.scope.CreateTodoActivityScope
 import dagger.Module
 import dagger.Provides
-import java.util.*
-import kotlin.collections.ArrayList
 
 @Module
 class CreateTodoActivityModule {

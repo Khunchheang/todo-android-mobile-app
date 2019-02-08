@@ -12,12 +12,14 @@ class GetTaskPresenterImpl(private val getTaskInter: GetTask.GetTaskInteractor) 
     }
 
     override fun onSuccess(data: TaskModel) {
-        view?.hideLoading()
         view?.onTaskResponse(data)
     }
 
     override fun getTaskById(taskId: Long) {
         view?.showLoading()
-        getTaskInter.onGetTask(taskId)
+
+        getTaskInter.onGetTask(taskId){
+            onResponseData(it)
+        }
     }
 }
